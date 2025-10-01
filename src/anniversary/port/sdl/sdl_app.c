@@ -27,6 +27,7 @@ static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static SDL_Texture* screen_texture = NULL;
 
+static bool fullscreen = 0;
 static Uint64 frame_start = 0;
 static Uint64 frame_deadline = 0;
 static Uint64 frame_end_times[FRAME_END_TIMES_MAX];
@@ -119,6 +120,12 @@ int SDLApp_PollEvents() {
             break;
 
         case SDL_EVENT_KEY_DOWN:
+            if (event.key.key == SDLK_F11) {
+                fullscreen = !fullscreen;
+                SDL_SetWindowFullscreen(window, fullscreen);
+            }
+
+            // fallthrough
         case SDL_EVENT_KEY_UP:
             set_screenshot_flag_if_needed(&event.key);
             SDLPad_HandleKeyboardEvent(&event.key);
